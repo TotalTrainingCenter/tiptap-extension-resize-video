@@ -30,6 +30,12 @@ declare module '@tiptap/core' {
 
       /** 선택한 영상의 폭을 바꾼다. (예: '480px', '100%') */
       setVideoWidth: (width: string) => ReturnType;
+
+      /**
+       * 같은 src 를 가진 영상 노드의 주소를 바꾼다.
+       * 업로드 직후에는 원본을, 서버 변환이 끝나면 변환본을 가리키게 하기 위한 것이다.
+       */
+      replaceVideoSrc: (from: string, to: string) => ReturnType;
     };
   }
 }
@@ -142,6 +148,26 @@ export const VideoResize = Node.create<VideoResizeOptions>({
             width,
             containerStyle: StyleManager.getContainerStyle(width),
           }),
+
+      replaceVideoSrc:
+        (from, to) =>
+        ({ tr, state, dispatch }) => {
+          // 커서가 어디에 있든 상관없이 문서 전체에서 그 영상을 찾는다.
+          // 업로드한 사람이 그 사이 다른 곳을 편집하고 있을 수 있기 때문이다.
+          let replaced = false;
+
+          state.doc.descendants((node, pos) => {
+            if (node.type.name !== this.name || node.attrs.src !== from) return;
+
+            tr.setNodeMarkup(pos, undefined, { ...node.attrs, src: to });
+            replaced = true;
+          });
+
+          if (replaced && dispatch) {
+            dispatch(tr);
+          }
+          return replaced;
+        },
     };
   },
 

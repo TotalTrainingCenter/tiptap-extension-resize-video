@@ -9,7 +9,8 @@
     "clean": "rm -rf dist",
     "build:types": "tsc",
     "build": "npm run clean && npm run build:types && rollup -c",
-    "dev": "npm run clean && rollup -c -w"
+    "dev": "npm run clean && rollup -c -w",
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.1",
