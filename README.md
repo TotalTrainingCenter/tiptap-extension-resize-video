@@ -1,52 +1,50 @@
 # tiptap-extension-resize-video
 
-TipTap 본문에 영상을 넣는 확장. 업로드한 영상이 그대로 `<video>` 노드가 되고,
-귀퉁이를 끌어 크기를, 위쪽 버튼으로 정렬을 바꿀 수 있다.
+A [Tiptap 3](https://tiptap.dev/) node extension that puts a `<video>` into the document and lets you **resize it by dragging a corner** and **align it** (left / center / right) from a small toolbar — the same workflow as [tiptap-extension-resize-image](https://github.com/TotalTrainingCenter/tiptap-extension-resize-image), but for video.
 
-같은 저장소의 `tiptap-extension-resize-image` 와 짝을 이룬다.
-그쪽은 `<img>` 전용이라 영상에는 쓸 수 없어서, 동일한 사용 흐름을 `<video>` 로 다시 만든 것이다.
+Made by [Total Training Center](https://training-center.org) for its editors and released under the MIT license. The interaction model follows [bae-sh/tiptap-extension-resize-image](https://github.com/bae-sh/tiptap-extension-resize-image) (MIT).
 
-`npm init tiptap-extension` (TypeScript 템플릿) 로 스캐폴드한 뒤 내용을 채웠다.
-
-## 설치
+## Install
 
 ```bash
-npm install tiptap-extension-resize-video
+npm install github:TotalTrainingCenter/tiptap-extension-resize-video
 ```
 
-이 저장소에서는 `package.json` 에 `file:` 경로로 물려 쓴다.
+Peer dependencies: `@tiptap/core` and `@tiptap/pm` 3.x. The package builds itself on install (`prepare`), producing `dist/index.js` (ESM), `dist/index.cjs.js` and type declarations.
 
-```json
-"tiptap-extension-resize-video": "file:src/dependencies/tiptap-extension-resize-video"
-```
-
-## 사용
+## Usage
 
 ```ts
+import StarterKit from '@tiptap/starter-kit'
+import { Editor } from '@tiptap/core'
 import VideoResize from 'tiptap-extension-resize-video'
 
-const editor = useEditor({
-  extensions: [
-    StarterKit,
-    VideoResize,
-  ],
+const editor = new Editor({
+  extensions: [StarterKit, VideoResize],
 })
 
-// 업로드가 끝난 뒤
-editor.chain().focus().setVideo({ src: '/file/image/2026/uploaded.mp4' }).run()
+// after your upload finishes
+editor.chain().focus().setVideo({ src: 'https://example.com/clip.mp4' }).run()
 
-// 폭 직접 지정
+// optional: poster image and initial width
+editor.chain().focus().setVideo({ src: '/clip.mp4', poster: '/clip.jpg', width: '480' }).run()
+
+// change the width of the selected video
 editor.chain().focus().setVideoWidth('480px').run()
 ```
 
-## 옵션
+Works with React, Vue and plain Tiptap — anything that renders a Tiptap 3 editor.
 
-| 옵션 | 기본값 | 설명 |
+## Options
+
+| Option | Default | Description |
 | --- | --- | --- |
-| `HTMLAttributes` | `{}` | `<video>` 에 항상 붙일 속성 |
-| `controls` | `true` | 재생 컨트롤 표시 여부 |
+| `HTMLAttributes` | `{}` | Attributes always added to the `<video>` element |
+| `controls` | `true` | Show the browser's playback controls |
 
-## 저장되는 형태
+Videos are rendered with `playsinline` so they don't jump to full screen on iOS.
+
+## Stored document shape
 
 ```json
 {
@@ -60,12 +58,19 @@ editor.chain().focus().setVideoWidth('480px').run()
 }
 ```
 
-공개 사이트의 TipTap → HTML 변환기는 허용 목록 방식이므로,
-본문을 공개로 내보내려면 그쪽에도 `video` 노드 처리를 추가해야 한다.
+If you convert Tiptap JSON to HTML on a server with an allow-list, add the `video` node there too.
 
-## 빌드
+## Build
 
 ```bash
 npm install
 npm run build   # dist/index.js, dist/index.cjs.js, dist/index.d.ts
 ```
+
+## 한국어 요약
+
+Tiptap 3 본문에 `<video>` 를 넣고, 귀퉁이를 끌어 크기를 바꾸고 위쪽 버튼으로 정렬하는 확장입니다. 이미지용 [tiptap-extension-resize-image](https://github.com/TotalTrainingCenter/tiptap-extension-resize-image) 와 같은 사용 흐름을 영상에 맞게 다시 만들었습니다. 종합 훈련 센터 에디터에서 쓰며 MIT 라이선스로 공개합니다.
+
+## License
+
+[MIT](./LICENSE)

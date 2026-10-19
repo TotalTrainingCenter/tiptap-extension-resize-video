@@ -41,5 +41,14 @@
     "resize-video",
     "resizable video",
     "align video"
-  ]
+  ],
+  "author": "Total Training Center <kimtaemin@training-center.org> (https://training-center.org)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TotalTrainingCenter/tiptap-extension-resize-video"
+  },
+  "homepage": "https://github.com/TotalTrainingCenter/tiptap-extension-resize-video#readme",
+  "bugs": {
+    "url": "https://github.com/TotalTrainingCenter/tiptap-extension-resize-video/issues"
+  }
 }
